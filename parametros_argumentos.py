@@ -1,0 +1,27 @@
+# def saudacao(nome, mensagem="Bem-vindo!"):
+#     print(f"Olá, {nome}! {mensagem}")
+
+
+# saudacao("Bob", "Bom dia")
+
+
+# def criar_usuario(nome, idade, admin=False):
+#     print(f"{nome} | {idade} anos | admin={admin}")
+
+
+# criar_usuario(idade=30, nome="Carol")
+# criar_usuario("Dan", 25, admin=True)
+
+def criar_perfil(nome, idade, cidade):
+    print(f'{nome}, {idade} anos, {cidade}')
+
+criar_perfil(cidade="Curitiba", nome="Julia", idade=25) 
+#Julia, 25 anos, Curitiba - funciona independente da ordem 
+
+
+def somar_tudo(*numeros):
+    return sum(numeros)
+
+print(somar_tudo(1, 2))
+print(somar_tudo( 1, 2, 3, 4))
+print(somar_tudo(20, 30))
