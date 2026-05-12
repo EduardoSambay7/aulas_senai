@@ -33,6 +33,7 @@ def temporizador_com_shutdown():
             timer = f"{mins:02d}:{secs:02d}"
 
             # Bip nos 10 segundos finais
+            #pygame pode tocar um bip em mp3
             bip = "\a" if 0 < segundos <= 10 else ""
 
             print(f"\rTempo restante: {timer} {bip}", end="", flush=True)
