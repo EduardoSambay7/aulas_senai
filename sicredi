@@ -1,40 +1,248 @@
 import tkinter as tk
 
+# =========================================
+# JANELA PRINCIPAL
+# =========================================
 root = tk.Tk()
-root.title("Simulador de investimentos - Sicredi")
-root.geometry("400x420")
-root.configure(bg="#005c36")
-
-# impede redimensionamento
+root.title("Simulador de Investimentos - PicPay")
+root.geometry("430x560")
+root.configure(bg="#21C25E")
 root.resizable(False, False)
 
-# título
-tk.Label(
-    root,
-    text="=== Simulador de Investimentos ===",
-    font=("Arial", 10, "italic"),
-    bg="#005c36",
-    fg="#a8d5bc"
-).pack(pady=(10, 20))
+# =========================================
+# CORES
+# =========================================
+COR_VERDE = "#21C25E"
+COR_VERDE_ESCURO = "#179B49"
+COR_BRANCO = "#FFFFFF"
+COR_TEXTO = "#1A1A1A"
+COR_ERRO = "#FFE5E5"
 
-# Valor Inicial
+# =========================================
+# TÍTULO
+# =========================================
+titulo = tk.Label(
+    root,
+    text="PicPay",
+    font=("Arial", 34, "bold"),
+    bg=COR_VERDE,
+    fg=COR_BRANCO
+)
+
+titulo.pack(pady=(25, 5))
+
+subtitulo = tk.Label(
+    root,
+    text="Simulador de Investimentos",
+    font=("Arial", 13),
+    bg=COR_VERDE,
+    fg="#E8FFF0"
+)
+
+subtitulo.pack(pady=(0, 30))
+
+# =========================================
+# CAMPO VALOR INICIAL
+# =========================================
 tk.Label(
     root,
-    text="Valor inicial (R$):",
+    text="Valor Inicial (R$)",
     font=("Arial", 10, "bold"),
-    bg="#005c36",
-    fg="#FFFFFF"
-).pack(anchor="w", padx=20)
+    bg=COR_VERDE,
+    fg=COR_BRANCO
+).pack(anchor="w", padx=25)
 
 entrada_principal = tk.Entry(
     root,
-    font=("Arial", 11),
-    bg="#FFFFFF",
-    fg="#005c36",
-    relief="groove",
-    width=40
+    font=("Arial", 12),
+    bg=COR_BRANCO,
+    fg=COR_TEXTO,
+    relief=tk.FLAT
 )
 
-entrada_principal.pack(pady = (4, 12), ipadx = 6, ipady = 8, fill = tk.X)
+entrada_principal.pack(
+    padx=25,
+    pady=(5, 18),
+    fill=tk.X,
+    ipady=10
+)
 
+# =========================================
+# CAMPO TAXA
+# =========================================
+tk.Label(
+    root,
+    text="Taxa de juros ao mês (%)",
+    font=("Arial", 10, "bold"),
+    bg=COR_VERDE,
+    fg=COR_BRANCO
+).pack(anchor="w", padx=25)
+
+entrada_taxa = tk.Entry(
+    root,
+    font=("Arial", 12),
+    bg=COR_BRANCO,
+    fg=COR_TEXTO,
+    relief=tk.FLAT
+)
+
+entrada_taxa.pack(
+    padx=25,
+    pady=(5, 18),
+    fill=tk.X,
+    ipady=10
+)
+
+# =========================================
+# CAMPO TEMPO
+# =========================================
+tk.Label(
+    root,
+    text="Tempo de investimento (meses)",
+    font=("Arial", 10, "bold"),
+    bg=COR_VERDE,
+    fg=COR_BRANCO
+).pack(anchor="w", padx=25)
+
+entrada_tempo = tk.Entry(
+    root,
+    font=("Arial", 12),
+    bg=COR_BRANCO,
+    fg=COR_TEXTO,
+    relief=tk.FLAT
+)
+
+entrada_tempo.pack(
+    padx=25,
+    pady=(5, 25),
+    fill=tk.X,
+    ipady=10
+)
+
+# =========================================
+# RESULTADO
+# =========================================
+lbl_resultado = tk.Label(
+    root,
+    text="Montante Final: R$ 0,00",
+    font=("Arial", 18, "bold"),
+    bg=COR_VERDE,
+    fg=COR_BRANCO
+)
+
+lbl_resultado.pack(pady=15)
+
+# =========================================
+# ERRO
+# =========================================
+lbl_erro = tk.Label(
+    root,
+    text="",
+    font=("Arial", 11, "bold"),
+    bg=COR_VERDE,
+    fg=COR_ERRO
+)
+
+lbl_erro.pack()
+
+# =========================================
+# FUNÇÃO CALCULAR
+# =========================================
+def calcular():
+
+    lbl_erro.config(text="")
+
+    try:
+
+        principal = float(
+            entrada_principal.get().replace(",", ".")
+        )
+
+        taxa = float(
+            entrada_taxa.get().replace(",", ".")
+        )
+
+        tempo = int(
+            entrada_tempo.get()
+        )
+
+        if principal <= 0 or taxa <= 0 or tempo <= 0:
+            lbl_erro.config(
+                text="Os valores devem ser maiores que zero."
+            )
+
+            lbl_resultado.config(
+                text="Montante Final: R$ 0,00"
+            )
+
+            return
+
+        # Juros compostos
+        montante = principal * (1 + taxa / 100) ** tempo
+
+        valor_formatado = f"{montante:,.2f}"
+
+        # padrão BR
+        valor_formatado = valor_formatado.replace(",", "X")
+        valor_formatado = valor_formatado.replace(".", ",")
+        valor_formatado = valor_formatado.replace("X", ".")
+
+        lbl_resultado.config(
+            text=f"Montante Final: R$ {valor_formatado}"
+        )
+
+    except ValueError:
+
+        lbl_erro.config(
+            text="Digite apenas números válidos."
+        )
+
+        lbl_resultado.config(
+            text="Montante Final: R$ 0,00"
+        )
+
+# =========================================
+# BOTÃO
+# =========================================
+btn_calcular = tk.Button(
+    root,
+    text="CALCULAR",
+    font=("Arial", 12, "bold"),
+    bg=COR_BRANCO,
+    fg=COR_VERDE,
+    activebackground=COR_VERDE_ESCURO,
+    activeforeground=COR_BRANCO,
+    relief=tk.FLAT,
+    cursor="hand2",
+    command=calcular
+)
+
+btn_calcular.pack(
+    padx=40,
+    pady=10,
+    fill=tk.X,
+    ipady=12
+)
+
+# =========================================
+# EFEITO HOVER
+# =========================================
+def entrar_botao(event):
+    btn_calcular.config(
+        bg=COR_VERDE_ESCURO,
+        fg=COR_BRANCO
+    )
+
+def sair_botao(event):
+    btn_calcular.config(
+        bg=COR_BRANCO,
+        fg=COR_VERDE
+    )
+
+btn_calcular.bind("<Enter>", entrar_botao)
+btn_calcular.bind("<Leave>", sair_botao)
+
+# =========================================
+# LOOP
+# =========================================
 root.mainloop()
